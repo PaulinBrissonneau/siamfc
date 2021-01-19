@@ -6,20 +6,26 @@ import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
 import time
+import datetime
 import cv2
 import sys
 import os
+import time
+import sys
 from collections import namedtuple
 from torch.optim.lr_scheduler import ExponentialLR
 from torch.utils.data import DataLoader
 from got10k.trackers import Tracker
+from matplotlib import pyplot as plt
+import matplotlib.ticker as mticker
 
 from . import ops
-from .backbones import AlexNetV1
+from .backbones import AlexNetV1, Resnet
 from .heads import SiamFC
 from .losses import BalancedLoss
 from .datasets import Pair
 from .transforms import SiamFCTransforms
+import torchvision
 
 
 __all__ = ['TrackerSiamFC']
@@ -47,12 +53,16 @@ class TrackerSiamFC(Tracker):
         # setup GPU device if available
         self.cuda = torch.cuda.is_available()
         self.device = torch.device('cuda:0' if self.cuda else 'cpu')
+        #self.device = "cpu"
 
         # setup model
         self.net = Net(
-            backbone=AlexNetV1(),
+            backbone=Resnet(),
             head=SiamFC(self.cfg.out_scale))
         ops.init_weights(self.net)
+        print(self.net.parameters())
+        for param in self.net.parameters():
+            print(type(param.data), param.size())
         
         # load checkpoint if provided
         if net_path is not None:
@@ -64,8 +74,7 @@ class TrackerSiamFC(Tracker):
         self.criterion = BalancedLoss()
 
         # setup optimizer
-        self.optimizer = optim.SGD(
-            self.net.parameters(),
+        self.optimizer = optim.SGD(self.net.parameters(),
             lr=self.cfg.initial_lr,
             weight_decay=self.cfg.weight_decay,
             momentum=self.cfg.momentum)
@@ -258,8 +267,15 @@ class TrackerSiamFC(Tracker):
         return loss.item()
 
     @torch.enable_grad()
-    def train_over(self, seqs, val_seqs=None,
-                   save_dir='pretrained'):
+    def train_over(self, seqs, val_seqs=None, save_dir='pretrained'):
+
+        now = datetime.datetime.now()
+        dir_name = "siamfc-"+str(now.year)+"_"+str(now.month)+"_"+str(now.day)+"-"+str(now.hour)+"_"+str(now.minute)
+        if not os.path.exists(dir_name):
+            os.mkdir(dir_name)
+        else :
+            raise Exception('Dossier existant')        
+
         # set to train mode
         self.net.train()
 
@@ -284,18 +300,64 @@ class TrackerSiamFC(Tracker):
             num_workers=self.cfg.num_workers,
             pin_memory=self.cuda,
             drop_last=True)
+
+        #graphs
+        X = []
+        Lloss = []
+        Llabels = []
         
+        step = 0
+        t0 = time.time()
         # loop over epochs
         for epoch in range(self.cfg.epoch_num):
             # update lr at each epoch
             self.lr_scheduler.step(epoch=epoch)
 
             # loop over dataloader
-            for it, batch in enumerate(dataloader):
+            for it, batch in enumerate(dataloader) :
+
+                step+=1
+                if it != 0 : Llabels.append("")
+                X.append(step)
+
+                step += 1
                 loss = self.train_step(batch, backward=True)
-                print('Epoch: {} [{}/{}] Loss: {:.5f}'.format(
-                    epoch + 1, it + 1, len(dataloader), loss))
+                Lloss.append(loss)
+
+                t = time.time() - t0
+
+                print(f'Epoch: {epoch + 1} [{it + 1}/{len(dataloader)}] ({round(t, 2)}s) {str(self.criterion)}: {round(loss, 10)}')
                 sys.stdout.flush()
+
+            Llabels.append(f"ep. {epoch} - {round(time.time() - t0, 2)}sec")
+
+            fig, ax = plt.subplots()
+            fig.canvas.draw()
+
+            plt.plot(X, Lloss, label = {str(self.criterion)})
+            Lloss_mean = list(np.convolve(Lloss, np.ones(40)/40, mode='valid'))
+            plt.plot(X, Lloss_mean+[None for _ in range(len(X)-len(Lloss_mean))], label = {str(self.criterion)+" (moving average)"})
+            
+            plt.legend()
+
+            fig.canvas.draw()
+
+            labels = [item.get_text() for item in ax.get_xticklabels()]
+            #print(len(labels))
+            #print(len(Llabels))
+            #for i in range (len(Llabels)):
+            #    if Llabels[i] != '' : labels[i] = Llabels[i]
+            labels[-1] = f"ep. {epoch+1} - {round(time.time() - t0, 2)}sec"
+            ax.set_xticklabels(labels)
+
+            #print(Llabels)
+            #ax.set_xticklabels(Llabels)
+            
+            plt.savefig(dir_name+f'/siamfc_loss_ep{epoch+1}.png')
+
+            plt.clf()
+            plt.cla()
+            plt.close()
             
             # save checkpoint
             if not os.path.exists(save_dir):

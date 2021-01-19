@@ -1,9 +1,12 @@
 from __future__ import absolute_import
 
+import torchvision
+import torchvision.models as models
+
 import torch.nn as nn
 
 
-__all__ = ['AlexNetV1', 'AlexNetV2', 'AlexNetV3']
+__all__ = ['AlexNetV1', 'AlexNetV2', 'AlexNetV3', 'Resnet']
 
 
 class _BatchNorm2d(nn.BatchNorm2d):
@@ -22,6 +25,25 @@ class _AlexNet(nn.Module):
         x = self.conv4(x)
         x = self.conv5(x)
         return x
+
+class Resnet(nn.Module):
+
+    
+
+    def __init__ (self) :
+        super(Resnet, self).__init__()
+        #self.model = torchvision.models.segmentation.deeplabv3_resnet50(pretrained=True, progress=True, num_classes=21, aux_loss=None)
+        self.model = models.alexnet(pretrained=True)
+        self.conv = nn.Sequential(nn.Conv2d(256, 256, 3, 1))
+        
+
+    def forward (self, x):
+        x = self.model.features(x)
+        #print(x.shape)
+        x = self.conv(x)
+        #print(x.shape)
+        return x
+        
 
 
 class AlexNetV1(_AlexNet):

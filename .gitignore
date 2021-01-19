@@ -3,7 +3,10 @@
 pretrained/
 results/
 data
-
+results/
+reports/
+siamfc-2021*
+*.png
 
 
 

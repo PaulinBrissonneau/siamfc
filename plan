@@ -1,0 +1,7 @@
+- enregistrer tous les résultats dans des fichiers json
+- trouver/créer des valeurs claires pour les résultats
+- (opt) superposer les apprentissage pour les 3 réseaux
+- entrainer un réseau sur autre chose (segmentation)
+	-> ou prendre sur : https://pytorch.org/docs/stable/torchvision/models.html#video-classification
+- caster ce réseau dans le siamfc (réflechir un peu)
+- mettre les résultats sur un même graphique
