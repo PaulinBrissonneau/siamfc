@@ -9,6 +9,9 @@ from siamfc import TrackerSiamFC
 if __name__ == '__main__':
     root_dir = os.path.expanduser('./data/GOT-10k')
     seqs = GOT10k(root_dir, subset='train', return_meta=True)
+    seqs_val = GOT10k(root_dir, subset='val', return_meta=True)
 
-    tracker = TrackerSiamFC()
-    tracker.train_over(seqs)
+    exp = [4]
+    for n_layer in exp :
+        tracker = TrackerSiamFC(n_layer=n_layer)
+        tracker.train_over(seqs, val_seqs=seqs_val)

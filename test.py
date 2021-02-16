@@ -7,9 +7,14 @@ from siamfc import TrackerSiamFC
 
 
 if __name__ == '__main__':
-    net_path = 'pretrained/siamfc_alexnet_e50.pth'
-    tracker = TrackerSiamFC(net_path=net_path)
+
+    siamfc_dir = "/workspace/code/IA/tracking/siamfc"
+    epoch = 98
+    version = "[TRAIN]toptrain"
+    net_path = f"{siamfc_dir}/{version}/siamfc_alexnet_e{epoch}.pth"
+    output_name = "center_brut"
+    tracker = TrackerSiamFC(net_path=net_path, output_name=output_name)
 
     e = ExperimentOTB('./data/OTB', version=2015)
-    e.run(tracker)
+    e.run(tracker, visualize=True)
     e.report([tracker.name])

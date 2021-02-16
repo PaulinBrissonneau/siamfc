@@ -1,13 +1,16 @@
 #siamfc
 
-pretrained/
-results/
-data
-results/
-reports/
-siamfc-2021*
-*.png
-
+/*
+!rapport
+*.sty
+*.bst
+*.txt
+*.bbl
+*.fdb*
+*.fls
+*.aux
+*.blg
+*.sync*
 
 
 # Byte-compiled / optimized / DLL files

@@ -16,6 +16,14 @@ class _BatchNorm2d(nn.BatchNorm2d):
             num_features, *args, eps=1e-6, momentum=0.05, **kwargs)
 
 
+class Identity(nn.Module):
+    def __init__(self):
+        super(Identity, self).__init__()
+        
+    def forward(self, x):
+        return x
+
+
 class _AlexNet(nn.Module):
     
     def forward(self, x):
@@ -26,25 +34,82 @@ class _AlexNet(nn.Module):
         x = self.conv5(x)
         return x
 
+class AlexNetImp(nn.Module):
+    def __init__ (self, pretrained) :
+        super(AlexNetImp, self).__init__()
+        imp = models.alexnet(pretrained=pretrained, progress=True)
+        self.backbone = nn.Sequential(*list(imp.features.children())[:-2])
+        self.backbone[-1] = nn.Conv2d(256, 256, 3, 1)
+
+    def forward (self, x):
+        x = self.backbone(x)
+        return x
+
 class Resnet(nn.Module):
-
     
-
-    def __init__ (self) :
+    def __init__ (self, pretrained) :
         super(Resnet, self).__init__()
-        #self.model = torchvision.models.segmentation.deeplabv3_resnet50(pretrained=True, progress=True, num_classes=21, aux_loss=None)
-        self.model = models.alexnet(pretrained=True)
-        self.conv = nn.Sequential(nn.Conv2d(256, 256, 3, 1))
+        self.model = torchvision.models.segmentation.fcn_resnet101(pretrained=pretrained, progress=True)
+        self.conv = nn.Conv2d(2048, 256, 3, 1)
         
 
     def forward (self, x):
-        x = self.model.features(x)
-        #print(x.shape)
+        x = self.model.backbone(x)['out']
         x = self.conv(x)
-        #print(x.shape)
+        return x
+
+class ResnetSEG(nn.Module):
+
+    def __init__ (self, pretrained) :
+        super(ResnetSEG, self).__init__()
+        imp = torchvision.models.segmentation.fcn_resnet101(pretrained=pretrained, progress=True)
+        print(list(imp.children()))
+        print(len(list(imp.children())))
+        self.backbone = nn.Sequential(*list(imp.children())[:-2])
+        print(len([mod for mod in list(self.backbone.modules()) if hasattr(mod, 'reset_parameters')]))
+        self.conv = nn.Conv2d(2048, 256, 3, 1)
+
+    def forward (self, x):
+        x = self.backbone(x)['out']
+        x = self.conv(x)
         return x
         
+class ResnetCLA(nn.Module):
 
+    def __init__ (self, pretrained) :
+        super(ResnetCLA, self).__init__()
+        imp = torchvision.models.resnet101(pretrained=pretrained, progress=True)
+        self.backbone = nn.Sequential(*list(imp.children())[:-2])
+        #print(len([mod for mod in list(self.backbone.modules()) if hasattr(mod, 'reset_parameters')]))
+        self.conv = nn.Conv2d(2048, 256, 3, 1)
+        
+    def forward (self, x):
+        x = self.backbone(x)
+
+        x = self.conv(x)
+        return x
+
+class AlexNetV0(_AlexNet):
+    output_stride = 8
+
+    def __init__(self):
+        super(AlexNetV0, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(3, 96, 11, 2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(96, 256, 5, 1, groups=2),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(256, 384, 3, 1),
+            nn.ReLU(inplace=True))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(384, 384, 3, 1, groups=2),
+            nn.ReLU(inplace=True))
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(384, 256, 3, 1, groups=2))
 
 class AlexNetV1(_AlexNet):
     output_stride = 8
@@ -126,3 +191,167 @@ class AlexNetV3(_AlexNet):
         self.conv5 = nn.Sequential(
             nn.Conv2d(768, 512, 3, 1),
             _BatchNorm2d(512))
+
+
+class AlexNetL1(_AlexNet):
+    output_stride = 8
+
+    def __init__(self):
+        super(AlexNetV1, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(3, 96, 11, 2),
+            _BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(96, 256, 5, 1, groups=2),
+            _BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(256, 384, 3, 1),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(384, 384, 3, 1, groups=2),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(384, 256, 3, 1, groups=2))
+
+
+class AlexNetL1(_AlexNet):
+    output_stride = 8
+
+    def __init__(self):
+        super(AlexNetV1, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(3, 96, 11, 2),
+            _BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(96, 256, 5, 1, groups=2),
+            _BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(256, 384, 3, 1),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(384, 384, 3, 1, groups=2),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(384, 256, 3, 1, groups=2))
+
+
+class AlexNetL1(_AlexNet):
+    output_stride = 8
+
+    def __init__(self):
+        super(AlexNetV1, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(3, 96, 11, 2),
+            _BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(96, 256, 5, 1, groups=2),
+            _BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(256, 384, 3, 1),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(384, 384, 3, 1, groups=2),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(384, 256, 3, 1, groups=2))
+
+
+
+class AlexNetL1(_AlexNet):
+    output_stride = 8
+
+    def __init__(self):
+        super(AlexNetV1, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(3, 96, 11, 2),
+            _BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(96, 256, 5, 1, groups=2),
+            _BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(256, 384, 3, 1),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(384, 384, 3, 1, groups=2),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(384, 256, 3, 1, groups=2))
+
+
+class AlexNetL1(_AlexNet):
+    output_stride = 8
+
+    def __init__(self):
+        super(AlexNetV1, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(3, 96, 11, 2),
+            _BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(96, 256, 5, 1, groups=2),
+            _BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(256, 384, 3, 1),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(384, 384, 3, 1, groups=2),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(384, 256, 3, 1, groups=2))
+
+
+
+class AlexNetL1(_AlexNet):
+    output_stride = 8
+
+    def __init__(self):
+        super(AlexNetV1, self).__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(3, 96, 11, 2),
+            _BatchNorm2d(96),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(96, 256, 5, 1, groups=2),
+            _BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(3, 2))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(256, 384, 3, 1),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(384, 384, 3, 1, groups=2),
+            _BatchNorm2d(384),
+            nn.ReLU(inplace=True))
+        self.conv5 = nn.Sequential(
+            nn.Conv2d(384, 256, 3, 1, groups=2))

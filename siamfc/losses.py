@@ -3,6 +3,9 @@ from __future__ import absolute_import, division
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
+
+from .ops import show_array
 
 
 __all__ = ['BalancedLoss', 'FocalLoss', 'GHMCLoss', 'OHNMLoss']
@@ -30,7 +33,12 @@ class BalancedLoss(nn.Module):
         super(BalancedLoss, self).__init__()
         self.neg_weight = neg_weight
     
-    def forward(self, input, target):
+    def forward(self, input, target, viz=False):
+
+        if viz :
+            show_array(input[0][0], "input")
+            show_array(target[0][0], "target")
+
         pos_mask = (target == 1)
         neg_mask = (target == 0)
         pos_num = pos_mask.sum().float()
