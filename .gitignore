@@ -12,6 +12,7 @@
 *.aux
 *.blg
 *.sync*
+!siamfc
 
 
 # Byte-compiled / optimized / DLL files
