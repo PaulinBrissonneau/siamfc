@@ -2,6 +2,7 @@
 
 /*
 !rapport
+!gitignore
 *.sty
 *.bst
 *.txt
