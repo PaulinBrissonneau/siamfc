@@ -76,11 +76,8 @@ class CNNL2(nn.Module):
             nn.MaxPool2d(3, 2))
 
     def forward(self, x):
-        print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
         x = self.conv5(x)
-        print(x.shape)
         return x
 
 class CNNL3(nn.Module):
@@ -102,13 +99,9 @@ class CNNL3(nn.Module):
 
 
     def forward(self, x):
-        print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
         x = self.conv4(x)
-        print(x.shape)
         x = self.conv5(x)
-        print(x.shape)
         return x
 
 class CNNL4(nn.Module):
@@ -133,15 +126,10 @@ class CNNL4(nn.Module):
             nn.Conv2d(384, 256, 3, 1, groups=2))
 
     def forward(self, x):
-        print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
         x = self.conv2(x)
-        print(x.shape)
         x = self.conv4(x)
-        print(x.shape)
         x = self.conv5(x)
-        print(x.shape)
         return x
 
 class CNNL5(nn.Module):
@@ -171,17 +159,11 @@ class CNNL5(nn.Module):
 
 
     def forward(self, x):
-        print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
         x = self.conv2(x)
-        print(x.shape)
         x = self.conv3(x)
-        print(x.shape)
         x = self.conv4(x)
-        print(x.shape)
         x = self.conv5(x)
-        print(x.shape)
         return x
 
 class CNNL6(nn.Module):
@@ -214,19 +196,12 @@ class CNNL6(nn.Module):
             nn.Conv2d(384, 256, 3, 1, groups=2))
 
     def forward(self, x):
-        print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
         x = self.conv2(x)
-        print(x.shape)
         x = self.conv3(x)
-        print(x.shape)
         x = self.conv4(x)
-        print(x.shape)
         x = self.conv41(x)
-        print(x.shape)
         x = self.conv5(x)
-        print(x.shape)
         return x
 
 class CNNL7(nn.Module):
@@ -263,21 +238,13 @@ class CNNL7(nn.Module):
             nn.Conv2d(384, 256, 3, 1, groups=2))
 
     def forward(self, x):
-        print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
         x = self.conv2(x)
-        print(x.shape)
         x = self.conv3(x)
-        print(x.shape)
         x = self.conv31(x)
-        print(x.shape)
         x = self.conv4(x)
-        print(x.shape)
         x = self.conv41(x)
-        print(x.shape)
         x = self.conv5(x)
-        print(x.shape)
         return x
 
 class CNNL8(nn.Module):
@@ -318,21 +285,12 @@ class CNNL8(nn.Module):
             nn.Conv2d(384, 256, 3, 1, groups=2))
 
     def forward(self, x):
-        print(x.shape)
         x = self.conv1(x)
-        print(x.shape)
         x = self.conv2(x)
-        print(x.shape)
         x = self.conv3(x)
-        print(x.shape)
         x = self.conv31(x)
-        print(x.shape)
         x = self.conv4(x)
-        print(x.shape)
         x = self.conv41(x)
-        print(x.shape)
         x = self.conv42(x)
-        print(x.shape)
         x = self.conv5(x)
-        print(x.shape)
         return x
