@@ -25,7 +25,7 @@ Le projet se base sur le *framework* `GOT-10k` qui peut (en théorie) s'adapter 
 > Note : Cela fonctionne aussi très bien de prendre GOT-10k pour les tests (puisque la banque est déjà séparée en train/val/test). Le problème est que les *ground truth* de la séquence de test ne sont pas publiques. Il faut passer par un serveur qui calcul les performances en ligne. Pour avoir testé, ça marche, mais ce n'est pas très pratique, c'est pour ça qu'on utilise OTB en test (comme le conseil aussi [huanglianghua](https://github.com/huanglianghua/siamfc-pytorch) dans le repo du code de référence).
 
 Ces datasets sont disponibles ici :
-- [GOT-10k](www.got-10k.aitestunion.com)
+- [GOT-10k](http://got-10k.aitestunion.com)
 - [OTB](http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html)
 
 Cependant, *framework* `GOT-10k` gère directement le téléchargement des données au bon format. Lors du lancement d'un entrainement, il téléchargera les données au bon format dans `./data/GOT-10k` et `./data/OTB` à la racine du projet.
