@@ -6,7 +6,6 @@ Préparation du dataset. La préparation est particulièrement complexe puisqu'e
 paires d'images de différents instants dans la vidéo.
 """
 
-
 from __future__ import absolute_import, division
 
 import numpy as np

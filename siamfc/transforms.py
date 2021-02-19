@@ -14,9 +14,7 @@ import torch
 
 from . import ops
 
-
 __all__ = ['SiamFCTransforms']
-
 
 class Compose(object):
 

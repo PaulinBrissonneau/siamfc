@@ -7,8 +7,6 @@ Pour le projet, les architectures "AlexNetImp", "ResnetSEG", "ResnetCLA", sont d
 L'idée été de tester différents transfert d'apprentissage. Ca n'a pas été concluant, ça n'apparait pas dans le rapport. 
 """
 
-
-
 import torchvision
 import torchvision.models as models
 

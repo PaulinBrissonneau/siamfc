@@ -5,7 +5,6 @@ Etape de construction des réseaux extracteurs qui appellent ensuite backbones.p
 Ce script sert de laboratoire pour tester différentes architectures et différents pré-entrainements des backbones.
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 import torch
