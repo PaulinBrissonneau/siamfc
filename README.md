@@ -1,5 +1,5 @@
 # Amélioration du noyau des systèmes siamois pour le suivi d’objets
-# Projet deep learning 3A CentraleSupélec
+### Projet deep learning 3A CentraleSupélec
 
 Paulin Brissonneau
 
