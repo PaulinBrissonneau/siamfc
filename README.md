@@ -20,7 +20,7 @@ La plupart des scripts sont forkés depuis https://github.com/huanglianghua/siam
 
 ## Jeux de données
 
-Le projet se base sur le *framework* `GOT-10k` qui peut (en théorie) s'adapter à n'importe quelle banque de vidéos de tracking. Cependant le projet a été développé avec le dataset GOT-10k (indépendant du *framework* du même nom) pour l'entrainement et la validation, et OTB pour les tests. Je conseille de reprendre ces deux banques, le bon fonctionnement de la préparation des données est assuré.
+Le projet se base sur le *framework* `GOT-10k` qui peut (en théorie) s'adapter à n'importe quelle banque de vidéos de tracking. Cependant le projet a été développé avec le dataset GOT-10k **(indépendant du *framework* du même nom)** pour l'entrainement et la validation, et OTB pour les tests. Je conseille de reprendre ces deux banques, le bon fonctionnement de la préparation des données est assuré.
 
 > Note : Cela fonctionne aussi très bien de prendre GOT-10k pour les tests (puisque la banque est déjà séparée en train/val/test). Le problème est que les *ground truth* de la séquence de test ne sont pas publiques. Il faut passer par un serveur qui calcul les performances en ligne. Pour avoir testé, ça marche, mais ce n'est pas très pratique, c'est pour ça qu'on utilise OTB en test (comme le conseil aussi [huanglianghua](https://github.com/huanglianghua/siamfc-pytorch) dans le repo du code de référence).
 
