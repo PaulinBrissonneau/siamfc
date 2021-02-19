@@ -13,10 +13,9 @@ La plupart des scripts sont forkés depuis https://github.com/huanglianghua/siam
 ## Installation des librairies
 
 ##### Les librairies utilisées par les programmes du projet sont :
-- 
-- 
-- 
-- 
+- Les classiques : matplotlib, PIL, openCV
+- Le *framework* `GOT-10k`qui permet de tester les suiveurs : `pip install got10k`
+- **pytorch** avec **torchvision** et **cuda** : `conda install pytorch torchvision cudatoolkit=9.0 -c pytorch`
 
 ## Jeux de données
 
