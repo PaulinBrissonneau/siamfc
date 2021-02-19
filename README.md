@@ -40,6 +40,6 @@ Cependant, *framework* `GOT-10k` gère directement le téléchargement des donn�
 ## Lancement d'un test
 
 - Pour lancer une batterie de test : `python test.py` après avoir chargé le bon environnement virtuel.
-- Pour choisir quel modèle on teste, on change les valeurs de `test.py`, en particulier, **version** et **epoch**, qui sont respectivement le nom du dossier `[TRAIN]siamfc-<date>` de l'entrainement, et l'epoch du modèle que l'on teste. Le dossier `[TRAIN]siamfc-<date>` est au placé tel qu'il a été créé pour l'entrainement, c'est-à-dire à la racine du projet.
+- Pour choisir quel modèle on teste, on change les valeurs de `test.py`, en particulier, **version** et **epoch**, qui sont respectivement le nom du dossier `[TRAIN]siamfc-<date>` de l'entrainement, et l'epoch du modèle que l'on teste. Le dossier `[TRAIN]siamfc-<date>` est placé tel qu'il a été créé pour l'entrainement, c'est-à-dire à la racine du projet.
 - Les résultats de tracking sont enregistrés dans `./results`, puis les performances (*precision*, *success rate*, etc) sont enregistrées dans `./reports`. Ces dossier sont créés automatiquement.
 - Par défaut, les résultats qualitatifs des tests (visualisation des noyaux, du suivi, etc), pour chaque séquence, seront enregistrés dans `./outputs/siamfc`. **Attention.** Comme ces résultats re-créent les vidéos, ils sont très lourds. Un lien symbolique vers un HDD peut être nécessaire. On peut se passer de ces résultats visuels en configurant `visualize=False` dans `test.py`.
