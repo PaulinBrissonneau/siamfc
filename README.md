@@ -7,8 +7,8 @@ La plupart des scripts sont forkés depuis https://github.com/huanglianghua/siam
 
 ## Contexte
 
-- Le projet *Amélioration du noyau des systèmes siamois pour le suivi d’objets* consiste à implémenter un réseau siamois pour le suivi d'objet et d'étudier une modification du noyau du système. Le système siamois de référence est le **siamFC** de L. Bertinetto et al. [Fully-convolutional siamese networks for object tracking, 2016](https://arxiv.org/pdf/1606.09549.pdf).
-- Le rapport associé au projet explicite les modifications apportées au système de référence. [Il est disponible ici](https://github.com/PaulinBrissonneau/siamfc/blob/main/rapport/rapport.pdf).
+- Le projet *Amélioration du noyau des systèmes siamois pour le suivi d’objets* consiste à implémenter un réseau siamois pour le suivi d'objet et d'étudier une modification du noyau du système. Le système siamois de référence est le **siamFC** de L. Bertinetto et al. [Fully-convolutional siamese networks for object tracking, 2016](https://arxiv.org/pdf/1606.09549.pdf){:target="_blank"}.
+- Le rapport associé au projet explicite les modifications apportées au système de référence. [Il est disponible ici](https://github.com/PaulinBrissonneau/siamfc/blob/main/rapport/rapport.pdf){:target="_blank"}.
 - Pour tout problème pour lancer l'algorithme lors de la notation du projet : paulin.brissonneau@student-cs.fr.
 
 ## Installation des librairies
@@ -25,13 +25,13 @@ Le projet se base sur le *framework* `GOT-10k` qui peut (en théorie) s'adapter 
 > Note : Cela fonctionne aussi très bien de prendre GOT-10k pour les tests (puisque la banque est déjà séparée en train/val/test). Le problème est que les *ground truth* de la séquence de test ne sont pas publiques. Il faut passer par un serveur qui calcul les performances en ligne. Pour avoir testé, ça marche, mais ce n'est pas très pratique, c'est pour ça qu'on utilise OTB en test (comme le conseil aussi [huanglianghua](https://github.com/huanglianghua/siamfc-pytorch) dans le repo du code de référence).
 
 Ces datasets sont disponibles ici :
-- [GOT-10k](http://got-10k.aitestunion.com)
-- [OTB](http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html)
+- [GOT-10k](http://got-10k.aitestunion.com){:target="_blank"}
+- [OTB](http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html){:target="_blank"}
 
 Cependant, *framework* `GOT-10k` gère directement le téléchargement des données au bon format. Lors du lancement d'un entrainement, il téléchargera les données au bon format dans `./data/GOT-10k` et `./data/OTB` à la racine du projet.
 **Attention.** Ce sont des banques de vidéos de grande résolution, l'espace disque nécessaire est donc assez gros (6Go pour OTB, 70Go pour GOT-10k). Un lien symbolique vers un disque HDD peut être utile mais ralentira les calculs (le chargement des données prend un temps non négligeable lors des calculs). 
 
-> Note : Au moment où j'écris le *readme* (19 fev 2021), le serveur du site de [GOT-10k](got-10k.aitestunion.com) ne répond plus, mais les données sont toujours accessibles en passant par le téléchargement automatique via le *framework* `GOT-10k`.
+> Note : Au moment où j'écris le *readme* (19 fev 2021), le serveur du site de [GOT-10k](http://got-10k.aitestunion.com){:target="_blank"} ne répond plus, mais les données sont toujours accessibles en passant par le téléchargement automatique via le *framework* `GOT-10k`.
 
 ## Lancement d'un entrainement
 
