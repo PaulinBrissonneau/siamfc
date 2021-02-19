@@ -35,7 +35,7 @@ Cependant, *framework* `GOT-10k` gère directement le téléchargement des donn�
 ## Lancement d'un entrainement
 
 - Pour lancer un entrainement : `python train.py` après avoir chargé le bon environnement virtuel.
-- Cela va créer un nouveau dossier `[TRAIN]siamfc-<date>` à la racine du projet. Ce dossier comportement toutes les informations de l'entrainement : les valeurs des indicateurs en cours d'entrainement et de validation (loss, temps, etc) ; les valeurs fixes de certains hyper-paramètres pour reconnaitre les entrainements ; les checkpoints de sauvegarde des modèles ; etc.
+- Cela va créer un nouveau dossier `[TRAIN]siamfc-<date>` à la racine du projet. Ce dossier comporte toutes les informations de l'entrainement : les valeurs des indicateurs en cours d'entrainement et de validation (loss, temps, etc) ; les valeurs fixes de certains hyper-paramètres pour reconnaitre les entrainements ; les checkpoints de sauvegarde des modèles ; etc.
 
 ## Lancement d'un test
 
