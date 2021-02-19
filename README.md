@@ -10,6 +10,7 @@ La plupart des scripts sont forkés depuis https://github.com/huanglianghua/siam
 - Le projet *Amélioration du noyau des systèmes siamois pour le suivi d’objets* consiste à implémenter un réseau siamois pour le suivi d'objet et d'étudier une modification du noyau du système. Le système siamois de référence est le **siamFC** de L. Bertinetto et al. [Fully-convolutional siamese networks for object tracking, 2016](https://arxiv.org/pdf/1606.09549.pdf)
 - Le rapport associé au projet explicite les modifications apportées au système de référence. [Il est disponible ici](https://github.com/PaulinBrissonneau/siamfc/blob/main/rapport/rapport.pdf)
 - Pour tout problème pour lancer l'algorithme lors de la notation du projet : paulin.brissonneau@student-cs.fr.
+- Le script qui a le plus d'intérêt pour le projet est `siamfc.py`, il comprend la définition du suiveur, toutes les règles de suivi, les fonctions d'entrainement et de validation, etc.
 
 ## Installation des librairies
 
