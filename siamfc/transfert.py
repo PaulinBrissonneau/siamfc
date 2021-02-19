@@ -1,3 +1,11 @@
+#Ecrit par Paulin Brissonneau
+
+"""
+Etape de construction des réseaux extracteurs qui appellent ensuite backbones.py et backbone_exp_layer.py.
+Ce script sert de laboratoire pour tester différentes architectures et différents pré-entrainements des backbones.
+"""
+
+
 from __future__ import absolute_import, division, print_function
 
 import torch
@@ -8,7 +16,7 @@ import numpy as np
 import torchvision
 
 from . import ops
-from .backbones import AlexNetV1, AlexNetV0, Resnet, ResnetSEG, ResnetCLA, AlexNetImp
+from .backbones import AlexNetV1, AlexNetV0, ResnetSEG, ResnetCLA, AlexNetImp
 from .backbones_exp_layer import CNNL1, CNNL2, CNNL3, CNNL4, CNNL5, CNNL6, CNNL7, CNNL8
 from .heads import SiamFC
 
@@ -24,6 +32,7 @@ class Net(nn.Module):
         x = self.backbone(x)
         return self.head(z, x)
 
+#initialisation du réseau de référence
 def init_vanilla (cfg, params_summary) :
     net = Net(
             backbone=AlexNetV1(),
@@ -32,68 +41,47 @@ def init_vanilla (cfg, params_summary) :
     params_summary["type"] = "vanillaV1"
     return net, net.parameters(), params_summary
 
+#intialisation d'un AlexNet pré-entrainé
+#cette fonction permet de tester différents type de transfert learning (elle n'est plus utilisée)
 def init_trained_alexnet (cfg, params_summary) :
     pretrained = False
     net = Net(
             backbone=AlexNetImp(pretrained=pretrained),
             head=SiamFC(cfg.out_scale))
     params_summary["type"] = "trained_alexnet_"+str(pretrained)
-
     freeze_params = []
     training_params = []
-
     mods = list(net.backbone.backbone.modules())
 
-    #reset(mods[0][8:])
-
-    #for module in mods :
-    #    print(mods)
-    #    freeze_params.append(str(module))
-
-    print(mods[0])
-
     #training_params = mods[0][-1].parameters() #descend peu ~40
-    #training_params = mods[0][-4:].parameters() #bloqué à ~0.69
+    training_params = mods[0][-4:].parameters() #bloqué à ~0.69
     #training_params = mods[0][-6:].parameters() #bloqué à ~0.69
     #training_params = mods[0][-9:].parameters() #bloqué à ~0.69
 
-    #training_params = mods[0][-1].parameters() #bloqué à ~0.69
-
-    training_params = mods[0][:].parameters()
-    #params_summary["training_params"] = str(mods[-1])
+    params_summary["training_params"] = str(mods[0][-4:])
 
     #for mod in mods[0][:9] :
     #    mod.requires_grad = False
     #    freeze_params.append(str(mod))
 
-
-    #print(mods[0][-1])
-    #print(mods[0][:-1])
-
-    #training_params.append(net.head.parameters())
-
-    #print(len(list(net.head.parameters())))
-
-    #params_summary["freeze_params"] = freeze_params
-
-    #training_params = net.parameters()
-    #params_summary["training_params"] = "all"
+    params_summary["freeze_params"] = freeze_params
 
     return net, training_params, params_summary
 
+#fonction pour reset les poids des modules
 def reset(to_reset) :
     for module in to_reset :
         if hasattr(module, 'reset_parameters'):
-            #ops.init_weights_module(module)
             module.reset_parameters()
             print(f"Reset layer {module}")
 
+#intialisation d'un ResNet pré-entrainé pour étudier d'influence du type de pré-entraienment
 def init_model_task (cfg, params_summary) :
 
     reset_params = []
     freeze_params=[]
 
-    task = "CLA"
+    task = "CLA" #variable pour choisir entre classification et segmentation pour le pré-entrainement
 
     if task == "CLA" :
         net = Net(
@@ -107,9 +95,7 @@ def init_model_task (cfg, params_summary) :
 
     print(len([mod for mod in list(net.modules()) if hasattr(mod, 'reset_parameters')]))
 
-
     to_reset = []
-    #print(net.backbone)
     reset_layer4 = False
     if reset_layer4 :
         if task == "CLA":
@@ -118,10 +104,7 @@ def init_model_task (cfg, params_summary) :
         if task == "SEG" :
             #print(list(list(net.backbone.backbone.children())[0])[-1])
             to_reset += list(net.backbone.backbone.children())[0].layer4.modules()
-
-        #
         reset_params.append("layer4")
-
         reset(to_reset)
 
     to_freeze = []
@@ -143,12 +126,14 @@ def init_model_task (cfg, params_summary) :
      
     return net, training_params, params_summary
 
+#Permet de tester différentes configuration de pré-entrainements de l'extracteur
+#On peut freeze et reset certaines couches particulières
 def init_model_pretrainedstudy (cfg, params_summary) :
 
     reset_params = []
     freeze_params=[]
 
-    model = "resnet" # alexnet
+    model = "resnet" #ou alexnet
 
     if model == "resnet" :
         net = Net(
@@ -160,7 +145,6 @@ def init_model_pretrainedstudy (cfg, params_summary) :
             backbone=AlexNetV1(),
             head=SiamFC(cfg.out_scale))
         ops.init_weights(net)
-
 
     to_reset = []
 
@@ -179,10 +163,7 @@ def init_model_pretrainedstudy (cfg, params_summary) :
     #reset_params.append("layer1")
 
     print("len(to_reset) : ", len(to_reset))
-
     reset(to_reset)
-
-
     to_freeze = []
 
     #to_freeze += net.parameters()
@@ -204,9 +185,6 @@ def init_model_pretrainedstudy (cfg, params_summary) :
     #reset_params.append("layer2")
     #to_freeze += net.backbone.model.backbone.layer1.parameters()
     #reset_params.append("layer1")
-
-    to_freeze = [] #eff
-    freeze_params = []
 
     print("len(to_freeze) : ", len(to_freeze))
 
@@ -232,7 +210,7 @@ def init_layer_exp(cfg, params_summary):
         net = Net(
             backbone=CNNL1(),
             head=SiamFC(cfg.out_scale))
-        lr = 1e-5
+        lr = 1e-3
 
     if cfg.n_layer == 2 :
         net = Net(
@@ -276,7 +254,6 @@ def init_layer_exp(cfg, params_summary):
             head=SiamFC(cfg.out_scale))
         lr = 1e-3
         
-    
     ops.init_weights(net)
     params_summary["type"] = "CNNL"+str(cfg.n_layer)
     return net, net.parameters(), params_summary, lr

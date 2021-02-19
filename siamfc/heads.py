@@ -1,3 +1,11 @@
+#Code forké depuis "huanglianghua" (https://github.com/huanglianghua/siamfc-pytorch)
+#Adapté et modifié par Paulin Brissonneau
+
+"""
+Tête du système siamois. Il effectue une cross-corrélation.
+Il n'y a aucun poids apprenable.
+"""
+
 from __future__ import absolute_import
 
 import torch.nn as nn

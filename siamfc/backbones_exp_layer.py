@@ -1,3 +1,9 @@
+#Ecrit par Paulin Brissonneau
+
+"""
+Défintion des réseaux extrcateurs pour les expériences faisant varier le nombre de couches.
+"""
+
 from __future__ import absolute_import
 
 import torchvision
@@ -5,17 +11,13 @@ import torchvision.models as models
 
 import torch.nn as nn
 
-
-__all__ = ['AlexNetV1', 'CNNL1', 'CNNL2', 'CNNL3', 'CNNL4', 'CNNL5', 'CNNL6', 'CNNL7', 'CNNL8']
-
-
 class _BatchNorm2d(nn.BatchNorm2d):
 
     def __init__(self, num_features, *args, **kwargs):
         super(_BatchNorm2d, self).__init__(
             num_features, *args, eps=1e-6, momentum=0.05, **kwargs)
 
-
+#extracteur de référence
 class AlexNetV1(nn.Module):
     output_stride = 8
 
@@ -50,7 +52,7 @@ class AlexNetV1(nn.Module):
         x = self.conv5(x)
         return x
 
-
+#extracteur 1 couche
 class CNNL1(nn.Module):
 
     def __init__(self):
@@ -62,6 +64,7 @@ class CNNL1(nn.Module):
         x = self.conv5(x)
         return x
 
+#extracteur 2 couches
 class CNNL2(nn.Module):
 
     def __init__(self):
@@ -80,6 +83,7 @@ class CNNL2(nn.Module):
         x = self.conv5(x)
         return x
 
+#extracteur 3 couches
 class CNNL3(nn.Module):
 
     def __init__(self):
@@ -104,6 +108,7 @@ class CNNL3(nn.Module):
         x = self.conv5(x)
         return x
 
+#extracteur 4 couches
 class CNNL4(nn.Module):
 
     def __init__(self):
@@ -132,6 +137,7 @@ class CNNL4(nn.Module):
         x = self.conv5(x)
         return x
 
+#extracteur 5 couches
 class CNNL5(nn.Module):
 
     def __init__(self):
@@ -166,6 +172,7 @@ class CNNL5(nn.Module):
         x = self.conv5(x)
         return x
 
+#extracteur 6 couches
 class CNNL6(nn.Module):
 
     def __init__(self):
@@ -204,6 +211,7 @@ class CNNL6(nn.Module):
         x = self.conv5(x)
         return x
 
+#extracteur 7 couches
 class CNNL7(nn.Module):
 
     def __init__(self):
@@ -247,6 +255,7 @@ class CNNL7(nn.Module):
         x = self.conv5(x)
         return x
 
+#extracteur 8 couches
 class CNNL8(nn.Module):
 
     def __init__(self):

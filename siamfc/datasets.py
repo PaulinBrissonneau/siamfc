@@ -1,3 +1,12 @@
+#Code forké depuis "huanglianghua" (https://github.com/huanglianghua/siamfc-pytorch)
+#Ce script n'a pas du tout été modifié
+
+"""
+Préparation du dataset. La préparation est particulièrement complexe puisqu'elle consiste à faire des
+paires d'images de différents instants dans la vidéo.
+"""
+
+
 from __future__ import absolute_import, division
 
 import numpy as np

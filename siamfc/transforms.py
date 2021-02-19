@@ -1,3 +1,10 @@
+#Code forké depuis "huanglianghua" (https://github.com/huanglianghua/siamfc-pytorch)
+#Ce script n'a pas du tout été modifié
+
+"""
+Transformations sur le dataset
+"""
+
 from __future__ import absolute_import, division
 
 import cv2

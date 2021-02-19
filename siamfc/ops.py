@@ -1,3 +1,12 @@
+#Code forké depuis "huanglianghua" (https://github.com/huanglianghua/siamfc-pytorch)
+#Adapté et modifié par Paulin Brissonneau
+
+"""
+Regroupe plusieurs opérations élémentaires utiles dans plusieurs parties du programme.
+Beaucoup d'ajouts sur la visualisation des données internes du système siamois.
+"""
+
+
 from __future__ import absolute_import, division
 
 import torch.nn as nn
@@ -45,8 +54,6 @@ def read_image(img_file, cvt_code=cv2.COLOR_BGR2RGB):
 
 def show_array(x, label, dir=None, from_np=False, norm=True, expstep=None, marker=None):
 
-    #print("SHOW ARRAY ", expstep)
-
     if dir is not None :
         dir_name = f"{dir}/{label}"
     else :
@@ -74,12 +81,10 @@ def show_image(img, boxes=None, dir=None, expstep=None, box_fmt='ltwh', colors=N
     if cvt_code is not None:
         img = cv2.cvtColor(img, cvt_code)
 
-    #print("SHOW IMAGE ", expstep)
     dir_name = f"{dir}/video"
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
     
-    # resize img if necessary
     max_size = 960
     if max(img.shape[:2]) > max_size:
         scale = max_size / max(img.shape[:2])
@@ -98,8 +103,7 @@ def show_image(img, boxes=None, dir=None, expstep=None, box_fmt='ltwh', colors=N
             track_center = np.array(track_center, dtype=np.float32) * scale
             
         if mean_center is not None:
-            mean_center = np.array(mean_center, dtype=np.float32) * scale
-            
+            mean_center = np.array(mean_center, dtype=np.float32) * scale 
     
     if boxes is not None:
         assert box_fmt in ['ltwh', 'ltrb']
