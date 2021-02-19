@@ -142,11 +142,6 @@ def show_image(img, boxes=None, dir=None, expstep=None, box_fmt='ltwh', colors=N
             pt2 = (box[0] + box[2], box[1] + box[3])
             img = cv2.rectangle(img, pt1, pt2, color.tolist(), thickness)
 
-    #juste pour générer annexe rapport
-    center = None
-    track_center = None
-    mean_center = None
-
     if center is not None:
         center = np.array(center, dtype=np.int32)
         img = cv2.circle(img, (center[1], center[0]), 2, color=(0,0,255),  thickness=2) #rouge

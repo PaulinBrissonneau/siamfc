@@ -6,7 +6,6 @@ Cout : entropie croisée sur les pixels des images.
 Le coût est équilibré entre instances positives et négatives.
 """
 
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

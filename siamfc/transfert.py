@@ -19,6 +19,9 @@ from .backbones import AlexNetV1, AlexNetV0, ResnetSEG, ResnetCLA, AlexNetImp
 from .backbones_exp_layer import CNNL1, CNNL2, CNNL3, CNNL4, CNNL5, CNNL6, CNNL7, CNNL8
 from .heads import SiamFC
 
+"""
+classe générique du système siamois : 2 extracteurs et une tête
+"""
 class Net(nn.Module):
 
     def __init__(self, backbone, head):
@@ -51,6 +54,10 @@ def init_trained_alexnet (cfg, params_summary) :
     freeze_params = []
     training_params = []
     mods = list(net.backbone.backbone.modules())
+
+    """
+    paragraphe pour choisir les paramètres entrainables
+    """
 
     #training_params = mods[0][-1].parameters() #descend peu ~40
     training_params = mods[0][-4:].parameters() #bloqué à ~0.69
@@ -145,12 +152,12 @@ def init_model_pretrainedstudy (cfg, params_summary) :
             head=SiamFC(cfg.out_scale))
         ops.init_weights(net)
 
+    """
+    paragraphe de reset
+    """
+
     to_reset = []
 
-        #reset resnet head weights
-    to_reset += net.backbone.model.classifier.modules()
-    reset_params.append("classifier")
-    
         #reset resnet backbone weights
     #to_reset += net.backbone.model.backbone.layer4.modules()
     #reset_params.append("layer4")
@@ -163,6 +170,11 @@ def init_model_pretrainedstudy (cfg, params_summary) :
 
     print("len(to_reset) : ", len(to_reset))
     reset(to_reset)
+
+    """
+    paragraphe de freeze
+    """
+
     to_freeze = []
 
     #to_freeze += net.parameters()

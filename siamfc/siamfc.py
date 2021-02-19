@@ -1,5 +1,5 @@
 #Code forké depuis "huanglianghua" (https://github.com/huanglianghua/siamfc-pytorch)
-#Adapté et modifié par Paulin Brissonneau
+#Fortement adapté et modifié par Paulin Brissonneau
 
 """
 Définition du suiveur (script principal)
@@ -18,11 +18,11 @@ import cv2
 import sys
 import os
 import time
-import sys
 import json
 from collections import namedtuple
 from torch.optim.lr_scheduler import ExponentialLR
 from torch.utils.data import DataLoader
+
 from got10k.trackers import Tracker
 from matplotlib import pyplot as plt
 import matplotlib.ticker as mticker
@@ -37,7 +37,7 @@ import torchvision
 import torchvision.transforms as trans
 from .ops import show_array
 
-
+#subclassing du tracker de GOT-10k, ce qui permet de faciliter les benchmarks
 class TrackerSiamFC(Tracker):
 
     def __init__(self, net_path=None, output_name=None, **kwargs):
@@ -53,7 +53,7 @@ class TrackerSiamFC(Tracker):
 
         self.running_mean_delta = 1
 
-        """Choix du type d'expérimentation (et donc du type d'extrcateur)"""
+        """Choix du type d'expérimentation (et donc du type d'extracteur)"""
         #self.net, training_params, self.params_summary = init_model_pretrainedstudy(self.cfg, self.params_summary)
         #self.net, training_params, self.params_summary = init_model_task(self.cfg, self.params_summary)
         self.net, training_params, self.params_summary = init_vanilla(self.cfg, self.params_summary)
@@ -177,7 +177,8 @@ class TrackerSiamFC(Tracker):
 
         #création du noyau
         self.kernel = self.net.backbone(z)
-        #création du noyau glissant, au début égal au noyau
+
+        #création du noyau glissant, initialisation tel que égal au noyau
         self.track_kernel = self.kernel
 
         if visualize : show_array(self.kernel[0][0], "kernel", from_np=False, expstep=expstep, dir=test_dir_name)
@@ -255,7 +256,7 @@ class TrackerSiamFC(Tracker):
         responses = upsample (responses)
         track_responses = upsample (track_responses)
 
-        """ Autre expérience sur la mise à jour des corrélations glissante, n'apparait pas dans le rapport :
+        """ Autre expérience sur la mise à jour des corrélations glissante, qui n'apparait pas dans le rapport car non concluante :
         beta = 0.7
         track_responses = beta*responses+(1-beta)*track_responses
         """
@@ -299,6 +300,7 @@ class TrackerSiamFC(Tracker):
 
         #argmax pour le noyau
         response, loc, disp_in_response, disp_in_instance, disp_in_image, scale_id, max_val = peak(responses)
+
         #argmax pour le noyau glissant
         track_response, track_loc, track_disp_in_response, track_disp_in_instance, track_disp_in_image, track_scale_id, track_max = peak(track_responses)
 
@@ -351,7 +353,7 @@ class TrackerSiamFC(Tracker):
     
 
     #fonction de suivi, nécessaire pour utiliser "got10k.experiments"
-    #son rôle principal est d'itérer dans "img_files" et appeller "self.update" à chaque étape
+    #son rôle principal est d'itérer dans "img_files" et appeler "self.update" à chaque étape
     def track(self, img_files, box, visualize=True):
 
         center=None
@@ -425,7 +427,7 @@ class TrackerSiamFC(Tracker):
         
         return loss.item()
 
-    #étpae de valisation (qui n'existait pas du tout dans la version forkée)
+    #étape de validation (aucune validation n'existait dans la version forkée)
     @torch.no_grad()
     def val_step (self, batch):
         self.net.eval()
@@ -539,17 +541,14 @@ class TrackerSiamFC(Tracker):
             #affichage des courbes pendant l'apprentissage
 
             Llabels.append(f"ep. {epoch} - {round(time.time() - t0, 2)}sec")
-
             fig, ax = plt.subplots()
             fig.canvas.draw()
-
             plt.plot(X, Lloss, label = {str(self.criterion)})
-            #calcul de la moyenne glissante pour lisser les courbes
+
+            #calcul de la moyenne glissante (= convolution avec un vecteur constant qui sert de fenêtre glissante) pour lisser les courbes
             Lloss_mean = list(np.convolve(Lloss, np.ones(40)/40, mode='valid'))
             plt.plot(X, Lloss_mean+[None for _ in range(len(X)-len(Lloss_mean))], label = {str(self.criterion)+" (moving average)"})
-            
             plt.legend()
-
             fig.canvas.draw()
 
             labels = [item.get_text() for item in ax.get_xticklabels()]
@@ -559,7 +558,6 @@ class TrackerSiamFC(Tracker):
             #enregistrement de l'historique d'apprentissage (pour les courbes)
             with open(dir_name+f'/train_ep{epoch+1}.json', 'w') as file :
                 json.dump(history,file)
-            
             plt.savefig(dir_name+f'/siamfc_loss_ep{epoch+1}.png')
 
             plt.clf()

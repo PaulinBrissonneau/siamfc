@@ -1,5 +1,5 @@
 #Code forké depuis "huanglianghua" (https://github.com/huanglianghua/siamfc-pytorch)
-#Adapté et modifié par Paulin Brissonneau
+#Ce script n'a pas du tout été modifié
 
 """
 Tête du système siamois. Il effectue une cross-corrélation.

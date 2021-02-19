@@ -1,7 +1,7 @@
 #Ecrit par Paulin Brissonneau
 
 """
-Défintion des réseaux extrcateurs pour les expériences faisant varier le nombre de couches.
+Définition des réseaux extracteurs pour les expériences faisant varier le nombre de couches.
 """
 
 from __future__ import absolute_import
