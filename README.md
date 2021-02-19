@@ -1,6 +1,7 @@
 # Projet deep learning 3A CentraleSupélec
 
 Paulin Brissonneau
+
 La plupart des scripts sont forkés depuis https://github.com/huanglianghua/siamfc-pytorch, puis modifiés, adaptés, voire réécrits.
 
 ## Contexte
