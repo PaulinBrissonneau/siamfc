@@ -28,7 +28,7 @@ Ces datasets sont disponibles ici :
 - [GOT-10k](http://got-10k.aitestunion.com)
 - [OTB](http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html)
 
-Cependant, *framework* `GOT-10k` gère directement le téléchargement des données au bon format. Lors du lancement d'un entrainement, il téléchargera les données au bon format dans `./data/GOT-10k` et `./data/OTB` à la racine du projet.
+Cependant, le *framework* `GOT-10k` gère directement le téléchargement des données au bon format. Lors du lancement d'un entrainement, il téléchargera les données au bon format dans `./data/GOT-10k` et `./data/OTB` à la racine du projet.
 **Attention.** Ce sont des banques de vidéos de grande résolution, l'espace disque nécessaire est donc assez gros (6Go pour OTB, 70Go pour GOT-10k). Un lien symbolique vers un disque HDD peut être utile mais ralentira les calculs (le chargement des données prend un temps non négligeable lors des calculs). 
 
 > Note : Au moment où j'écris le *readme* (19 fev 2021), le serveur du site de [GOT-10k](http://got-10k.aitestunion.com) ne répond plus, mais les données sont toujours accessibles en passant par le téléchargement automatique via le *framework* `GOT-10k`.
